@@ -495,8 +495,10 @@
         // confirmation screen; the destination form is the confirmation.
         // Backend v1.2+ already puts respondent_email in the URL; this
         // adds it only if an older backend left it out.
+        // v1.3: never add it for anonymous 360 raters (Direct Reports,
+        // Peers, Stakeholders) — their email is logged, not sent to the form.
         var url = result.redirect_url;
-        if (email && url.indexOf("respondent_email=") === -1) {
+        if (email && !result.anonymous_rater && result.respondent_type !== "360" && url.indexOf("respondent_email=") === -1) {
           url += (url.indexOf("?") === -1 ? "?" : "&") + "respondent_email=" + encodeURIComponent(email);
         }
         window.location.href = url;
